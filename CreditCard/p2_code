@@ -1,0 +1,44 @@
+# --------------------- Week 2 ---------------------
+    # -----> Task 1
+def mod_fixed_numbers_formula(cardNumber, fixedNumbers, mod):
+    sumCheck = 0
+    for digit in range (0, len(cardNumber)):
+        dIValue = fixedNumbers[digit] * cardNumber[digit]
+        sumCheck += dIValue
+    mod = sumCheck % mod
+    return mod
+
+def card_number_end_builder(cardNumberList, mod):
+    cardNumber = list()
+    cardRemainder = [
+        [4,10,9,2,1,7], 
+        [7,8,7,1,9,6], 
+        [9,1,7,8,7,7], 
+        [1,2,9,10,4,1]
+    ]
+    cardNumber = cardNumberList.copy()
+    for nextFixedSet in range (0, len(cardRemainder)):
+        nextCardNumber = mod_fixed_numbers_formula(cardNumberList, cardRemainder[nextFixedSet], mod)
+        if (nextCardNumber >= 10):
+            print("unsuable number: {0}".format(nextCardNumber))
+            return
+        else: 
+            cardNumber.append(nextCardNumber)
+    return cardNumber
+
+a = [0,0,0,0,0,1]
+b = [0,0,0,0,0,2]
+c = [0,0,0,0,1,0]
+d = [0,0,0,0,1,1]
+d = [0,0,0,0,1,1]
+e = [0,0,0,0,0,3]
+f = [0,0,0,0,0,9]
+
+mod = 11
+
+print(card_number_end_builder(a, 11))
+print(card_number_end_builder(b, 11))
+print(card_number_end_builder(c, 11))
+print(card_number_end_builder(d, 11))
+print(card_number_end_builder(e, 11))
+print(card_number_end_builder(f, 11))

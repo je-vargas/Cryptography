@@ -1,0 +1,79 @@
+# --------------------- Week 1 ---------------------
+# Task 2 ISBN number checker
+
+def transform_input_to_number_list(isbnNumber):
+    numberList = list()
+    sliceUpto = 1
+    for i in range(0, len(isbnNumber), sliceUpto):
+        numberList.append(int(isbnNumber[i : i + sliceUpto]))
+    return numberList
+
+def isbn_number_checker(isbnNumberArray, mod):
+    sumCheck = 0
+    for digit in range (0, len(isbnNumberArray)):
+        isbnDigitPosition = digit + 1
+        indexSum = (isbnDigitPosition * isbnNumberArray[digit]) 
+        sumCheck = indexSum + sumCheck
+    mod = sumCheck % mod
+    return mod
+
+
+# Task 3 credit card checker
+def doubled_digit(digit):
+    doubleDigit = digit * 2 
+    if ( doubleDigit >= 10):
+        return (doubleDigit - 9)
+    return doubleDigit
+
+def credit_card_checker(cardNumber):
+    cardNumbersSplit = cardNumber.copy()
+    for digit in range(0, len(cardNumbersSplit) , 2):
+        cardNumbersSplit[digit] = doubled_digit(cardNumbersSplit[digit])
+    cardNumbersSum = sum(cardNumbersSplit)
+    validCardNumber = cardNumbersSum % 10
+    if validCardNumber == 0:
+        print("valid: {0}".format(validCardNumber))
+    print("invalid: {0}".format(validCardNumber))
+
+
+
+
+# def doubled_digit(digit):
+    #     "def: split integer if greater than 10 and add then together"
+    #     doubleDigit = digit * 2 
+    #     doubleSplit = None
+    #     if ( doubleDigit > 10):
+    #         doubleSplit = [int(dSplit) for dSplit in str(doubleDigit)]
+    #         return sum(doubleSplit)
+    #     return doubleDigit
+        
+# def credit_card_checker(cardNumber):
+    #     cardNumbersSplit = cardNumber.copy()
+    #     for digit in range(0, len(cardNumbersSplit) , 2):
+    #         cardNumbersSplit[digit] = doubled_digit(cardNumbersSplit[digit])
+    #     cardNumbersSum = str(sum(cardNumbersSplit))
+    #     lastDigitOfCardSum = int(cardNumbersSum[-1:])
+    #     if lastDigitOfCardSum == 0:
+    #         print("valid: {0}".format(lastDigitOfCardSum))
+    #     print("invalid: {0}".format(lastDigitOfCardSum)
+
+# reading number here inputed by command line
+# isbnNumberInput = input("Enter ISBN number: ")
+# isbnNumberList = transform_input_to_number_list(isbnNumberInput)
+
+# a = [9,9,9,9,2,1,5,8,1,0,7]
+# b = [9,6,0,4,2,5,0,5,9,0]
+# c = [1,8,4,3,5,6,0,2,8,0]
+# d = [0,9,4,3,3,9,6,0,4,2]
+# # check = isbn_number_checker(isbnNumberList)
+# check = isbn_number_checker(a, 11)
+# print(str(check))
+# check = isbn_number_checker(b, 11)
+# print(str(check))
+# check = isbn_number_checker(c, 11)
+# print(str(check))
+
+# ---> Task 2 Card Checker
+a = [4,0,0,3,6,0,0,0,0,0,0,0,0,0,1,4]
+a = [4,5,5,2,7,2,0,4,1,2,3,4,5,6,9,8]
+credit_card_checker(a)
