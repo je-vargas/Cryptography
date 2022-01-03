@@ -41,12 +41,6 @@ def mod(x, mod):
 
 # --------------------- Week 3 ---------------------
 # inplement BHC
-
-def encode_bch():
-    # this was done in week 2 practical
-    "Definition: double error correction code"
-    exit()
-
 def check_multiplier(bchMultiplier, modOperator):
     if bchMultiplier >= 10:
         return mod(bchMultiplier, modOperator)
@@ -179,15 +173,38 @@ def decode_bch(bchNumber):
             print("morethan2_no_sqrt(sync({0}, pqr({1},{2},{3}))\n".format(syndrome, P, Q, R))
             return
 
-def brute_force_bch_checker(bchBruteForce):
+def encode_bch(bchNumber):
+    bch_encode = []
+    modSize = 11
+
+    d7 = 4*bchNumber[0] + 10*bchNumber[1] + 9*bchNumber[2] + 2*bchNumber[3] + bchNumber[4] + 7*bchNumber[5]
+    d8 = 7*bchNumber[0] + 8*bchNumber[1] + 7*bchNumber[2] + bchNumber[3] + 9*bchNumber[4] + 6*bchNumber[5]
+    d9 = 9*bchNumber[0] + bchNumber[1] + 7*bchNumber[2] + 8*bchNumber[3] + 7*bchNumber[4] + 7*bchNumber[5]
+    d10 = bchNumber[0] + 2*bchNumber[1] + 9*bchNumber[2] + 10*bchNumber[3] + 4*bchNumber[4] + bchNumber[5]
+    
+    d7 = mod(d7, modSize)
+    d8 = mod(d8, modSize)
+    d9 = mod(d9, modSize)
+    d10 = mod(d10, modSize)
+
+    if d7 != 10 and d8 != 10 and d9 != 10 and d10 != 10:
+        bch_encode = bchNumber.copy()
+        bch_encode.append(d7)
+        bch_encode.append(d8)
+        bch_encode.append(d9)
+        bch_encode.append(d10)
+    
+    return bch_encode
+
+def valid_bch_check(bchBruteForce):
     SYNDROME_LENGTH = 4
     MOD = 11
     syndrome = calculate_syndrome(bchBruteForce, SYNDROME_LENGTH, MOD)
-    pqr = calculate_pqr(syndrome, MOD)
-    P = pqr[0]
-    Q = pqr[1]
-    R = pqr[2]
-
+    
     if(sum(syndrome) == 0):
-        return bchBruteForce
+        print("should always be valid numbers now")
+        return True
+        
+    print("invalid number after encoding")
+    return False
 
