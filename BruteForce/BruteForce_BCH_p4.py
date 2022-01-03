@@ -40,6 +40,7 @@ def test(target, possibleSolution, start):
 def test_bch_hash(target, possibleSolution, start):
     encodedSolution = sha1_encode(possibleSolution)
     if target == encodedSolution:
+        print(f"target: {target} - solution: {possibleSolution}")
         end = time.time()
         print("solution found : {0}".format(possibleSolution))
         print(f"Runtime of the program is {end - start}")
@@ -113,15 +114,21 @@ def brute_force_BCH(target, startTime):
                             solution.append(number_rangee[pos5])
 
                             encoded_bch = bch.encode_bch(solution)
+                            print(encoded_bch)
+
                             if len(encoded_bch) != 0:
+                                print(f"Length > 0: {encoded_bch}\n")
+
                                 validBCH = bch.valid_bch_check(encoded_bch)
+
                                 if validBCH:
                                     testPassword = ''.join(str(n) for n in encoded_bch)
                                     print(f"password to hash: {testPassword}\n")
                                     test_bch_hash(target, testPassword, startTime)
-                            print("position d7, d8, d9 or d10 returned a value of 10")
+                            solution.clear()
 
 #! ---------------- CODE START HERE ----------------
+# ---------------- Alpha-Numeric Brute Force ----------------
 
 # combinationRange = range_numeric_alphabetical("a", "z", 0, 9)
 
@@ -142,19 +149,13 @@ def brute_force_BCH(target, startTime):
 # brute_force_alpha_numeric(pass4, combinationRange, start)
 
 
-# ------------- BCH -------------
-bch_Bforce = [
-    "902608824fae2a1918d54d569d20819a4288a4e4",
-    "88d0b34055b79644196fce25f876bc1a5ef654d3",
-    "5b8f495b7f02b62eb228c5dbece7c2f81b60b9a3"
-]
-
-# for target in bch_Bforce:
-#     start = time.time()
-#     brute_force_BCH(target, start)
+# ------------- BCH Brute Force -------------
+bch_1 = "902608824fae2a1918d54d569d20819a4288a4e4" #? time: 0.00086998 secs solution is -> 0000118435
+bch_2 = "88d0b34055b79644196fce25f876bc1a5ef654d3" #? time: 13.94 seconds solution is -> 1111110565
+bch_3 = "5b8f495b7f02b62eb228c5dbece7c2f81b60b9a3" #? time: 104.50316596031189 solution is -> 8888880747
 
 start = time.time()
-brute_force_BCH(bch_Bforce[0], start)
+brute_force_BCH(bch_2, start)
 
 
 

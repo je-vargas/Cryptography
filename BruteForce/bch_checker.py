@@ -177,6 +177,8 @@ def encode_bch(bchNumber):
     bch_encode = []
     modSize = 11
 
+    if len(bchNumber) > 6: raise Exception(f"Error!! BCH should be of size 6 to encode : {bchNumber}")
+
     d7 = 4*bchNumber[0] + 10*bchNumber[1] + 9*bchNumber[2] + 2*bchNumber[3] + bchNumber[4] + 7*bchNumber[5]
     d8 = 7*bchNumber[0] + 8*bchNumber[1] + 7*bchNumber[2] + bchNumber[3] + 9*bchNumber[4] + 6*bchNumber[5]
     d9 = 9*bchNumber[0] + bchNumber[1] + 7*bchNumber[2] + 8*bchNumber[3] + 7*bchNumber[4] + 7*bchNumber[5]
@@ -200,11 +202,12 @@ def valid_bch_check(bchBruteForce):
     SYNDROME_LENGTH = 4
     MOD = 11
     syndrome = calculate_syndrome(bchBruteForce, SYNDROME_LENGTH, MOD)
+    print(f"syndrome: {syndrome}")
     
     if(sum(syndrome) == 0):
-        print("should always be valid numbers now")
+        print(f"valid bch syndrome: {syndrome}")
         return True
-        
-    print("invalid number after encoding")
-    return False
+    else:
+        print(f"syndrome != 0 : {syndrome}")
+        return False
 
