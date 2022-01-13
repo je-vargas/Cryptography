@@ -42,6 +42,16 @@ def mod(x, mod):
 
 # --------------------- Week 3 ---------------------
 # inplement BHC
+#* 15 digits of credit card are random generated
+def read_number(readNumber):
+    '''
+        DEFINITION: Read's number from keyboard input and returns it into a list
+    '''
+    numberList = list()
+    sliceUpto = 1
+    for i in range(0, len(readNumber), sliceUpto):
+        numberList.append(int(readNumber[i : i + sliceUpto]))
+    return numberList
 
 def encode_bch():
     # this was done in week 2 practical
@@ -210,10 +220,11 @@ test2Bch = [
 ]
 
 
-for test in testBch:
-    decode_bch(test)
+# for test in testBch:
+#     decode_bch(test)
 
 # for test in test2Bch:
 #     decode_bch(test)
 
-# a = mod_division((-7+4)), divisor, mod)
+bch = read_number(input("\nenter bch number: "))
+decode_bch(bch)
