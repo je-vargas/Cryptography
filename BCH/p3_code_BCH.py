@@ -220,11 +220,11 @@ test2Bch = [
 ]
 
 
-# for test in testBch:
-#     decode_bch(test)
+for test in testBch:
+    decode_bch(test)
 
 # for test in test2Bch:
 #     decode_bch(test)
 
-bch = read_number(input("\nenter bch number: "))
-decode_bch(bch)
+# bch = read_number(input("\nenter bch number: "))
+# decode_bch(bch)

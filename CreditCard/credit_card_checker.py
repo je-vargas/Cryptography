@@ -7,6 +7,7 @@ def read_number(readNumber):
     '''
     numberList = list()
     sliceUpto = 1
+    #
     for i in range(0, len(readNumber), sliceUpto):
         numberList.append(int(readNumber[i : i + sliceUpto]))
     return numberList
@@ -37,7 +38,7 @@ def credit_card_checker(cardNumber):
     else: print("invalid: {0}".format(validCardNumber))
         
 # ---> Task 2 Card Checker
-a = read_number(input("\nenter credit card number:"))
+# a = read_number(input("\nenter credit card number:"))
 # a = [4,0,0,3,6,0,0,0,0,0,0,0,0,0,1,4]
 a = [4,5,5,2,7,2,0,4,1,2,3,4,5,6,9,8]
 credit_card_checker(a)
