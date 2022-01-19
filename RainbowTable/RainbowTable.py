@@ -200,10 +200,11 @@ def traverse_chain(start_of_chain):
         hash_ = sha1_encode(int_in_password_space)
         print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {position}")    
         position += 1
-        
-def chain_reduce(target, plaintext, position, prime, table_size, alphabet):
+
+def chain_reduce(target, plaintext, position, prime, table_size, alphabet, tracker_position):
     #: reduce chain and check against target
     pwd = plaintext
+    found_password = False
     
     while (position < table_size): #the last position of the chain):
         
@@ -211,62 +212,52 @@ def chain_reduce(target, plaintext, position, prime, table_size, alphabet):
 
         if next_hash == target: 
             print(f"pwd: {pwd}\t hash: {next_hash}")
-            return pwd
+            found_password = True
+            return pwd, tracker_position, found_password
 
         position += 1
         pwd = reduction(next_hash, position, prime, alphabet) #* R at pos
-    
-    pwd = ""    
-    return pwd    
 
-def break_password(target, read_dict, table_size, prime, alphabet):
-    goal = target
+    return pwd, tracker_position, found_password
+
+def build_chain_from_position(use_hash, position, chain_length, prime, alphabet):
+    starting_hash = use_hash
+    for position in range(position, chain_length):
+        # print(f"reducing poss: {position}")
+        pwd = reduction(starting_hash, position, prime, alphabet)
+        hash_value = sha1_encode(pwd)
+        starting_hash = hash_value
+    print(f"pwd: {pwd}\t hash: {hash_value}/n")
+    return hash_value
+
+def break_password(target, goal, position, read_dict, table_size, prime, alphabet):
+    pass_found = False
     find_key = target
     chain_start = ""
-    position = table_size - 1
+    new_possition = position
     position_chain_reduce = 0
 
-    if find_key in read_dict:
-        chain_start = read_dict[find_key] #* hash in look up table return start of that chain
-        
-        pwd = chain_reduce(goal, chain_start, position_chain_reduce, prime, table_size, alphabet)
+    if new_possition == 0 :
+        print("Password not found!!")
+        exit()
+    else:
 
-        if pwd != "" and position == table_size-1:    
-            print(f"found password: {pwd}") 
-            exit() 
-    else: 
-        print(":) -->")
-        # aply reduction function starting with last and check if in table
+        if find_key in read_dict:
+            chain_start = read_dict[find_key] #* hash in look up table return start of that chain
+            print(f"key found: {find_key}\t init: {chain_start}\tposs: {new_possition}")
+            
+            pwd, new_possition, pass_found= chain_reduce(goal, chain_start, position_chain_reduce, prime, table_size, alphabet, new_possition)
 
-
-    find_chain = goal
-    #: since initial hash is not in look up table reduce until we find a hash in look up table and then traveser chain
-    while (position > 0):
-        pwd = reduction(find_chain, position, prime, alphabet) #* R at pos
-        chain_key = sha1_encode(pwd)
-
-        print(f"reduce @ pos: {position}\tstart value: {find_chain}")
-        print(f"pwd: {pwd}\thash: {chain_key}")
-
-        if chain_key in read_dict:
-            chain_start = read_dict[chain_key]    
-            print(f"found chain: {chain_start} : {chain_key}")
-
-            pwd = chain_reduce(goal, chain_start, position_chain_reduce, prime, table_size, alphabet)
-
-            if pwd != "" and position == table_size-1:             
+            if pass_found:    
                 print(f"found password: {pwd}") 
                 exit() 
         
-        position -= 1
-        
-    print("Password not found!!!")
-    exit()    
-
-def build_chain_from_position(use_hash, position, chain_length):
-    for position in range(position, chain_length):
-        print(position)
-
+        find_key = build_chain_from_position(goal, new_possition, table_size, prime, alphabet)
+        new_possition -= 1
+        break_password(find_key, goal, new_possition, read_dict, table_size, prime, alphabet)
+            
+    
+    
 
 
 
@@ -293,13 +284,16 @@ pass_length = 4
 # b = sha1_encode("0411")
 # plaintext = "0303" #: can't find this or ones above yet
 # plaintext = "0210" #: find password when the end of the chain is the password
-plaintext = "0001"
+# plaintext = "0001"
+# plaintext = "1042"
+plaintext = "1"
 goal = sha1_encode(plaintext)
 
 read_dict = read_hash_table("RainbowTable/table_length_4_adding.csv") #* read table
 table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+starting_position = table_size -1
 print(f"goal: {plaintext}\thash: {goal}\n")
-break_password(goal, read_dict, table_size, prime, ALPHABET)
+break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
 
 
 
