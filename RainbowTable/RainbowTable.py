@@ -9,11 +9,13 @@ import random
 
 #: ------------- GLOBAL VARIABLES -------------
 FILE_CREATED = False
-ALPHABET = ['0', '1', '2']
+ALPHABET = ['0', '1', '2', '4']
 # ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 # ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-# LENGTH = 3
-# ALPHABET = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+# LENGTH = 8
+LENGTH = 4
+# TABLE_MULTIPLIER = 1.3
+TABLE_MULTIPLIER = 1.6
 
 #: ------------- FUNCTIONS -------------
 
@@ -32,14 +34,14 @@ def create_csv_file(file_name):
         print(f"File already exists: {err}")
         return
 
-def write_hash_table(dictionary):
-    with open('RainbowTable/table.csv', 'a', encoding='UTF8', newline='', ) as f:
+def write_hash_table(dictionary, file_name):
+    with open(file_name, 'a', encoding='UTF8', newline='', ) as f:
         for keys in dictionary.keys():
             f.write("%s,%s\n"%(keys, dictionary[keys]))
 
-def read_hash_table():
+def read_hash_table(file_name):
     read_table = dict()
-    with open('RainbowTable/table.csv', newline='') as csvfile:
+    with open(file_name, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             read_table[row['chain_end']] = row['chain_start']
@@ -57,7 +59,7 @@ def range_numeric_alphabetical(startLetter, endLetter, startInt, endInt):
         alpha_numeric_range_list.append(str(i))
     return alpha_numeric_range_list
 
-def password_space_size(alphabet_size, pass_length):
+def password_space_size(alphabet_size, pass_length, table_size_multiplier):
     '''
         #* returns: 
             #: size of password space -> possible combinations
@@ -68,10 +70,9 @@ def password_space_size(alphabet_size, pass_length):
     for i in range(alphabet_size):
         # print(f"power : {pass_length - i}")
         pass_space += alphabet_size ** (pass_length - i)
-
-    incremented_space = pass_space * 1.3
+    pass_space += 1
+    incremented_space = pass_space * table_size_multiplier
     table_size = int(round_half_up(math.sqrt(incremented_space)))
-    # prime = sympy.nextprime(incremented_space)
     prime = sympy.nextprime(pass_space)
 
     print(f"\nspace: {pass_space} \t table size: {table_size} \t prime: {prime}\n")
@@ -98,11 +99,11 @@ def weighted_sum(hash_value, position, prime_mod, alphabet_set_len):
     for i in range(hash_value_length):
         ascii_list.append(ord(hash_value[i]))
         total += (ascii_list[i] * (alphabet_set_len ** (hash_value_length - i))) #% prime_mod
-    total = (total * position) % prime_mod
+    total = (total + position) % prime_mod
 
     return total
 
-def int_to_string(n, alphabet_set, pass_length):
+def int_to_string(n, alphabet_set):
     s = ""
     base = len(alphabet_set)
 
@@ -128,24 +129,12 @@ def int_to_string_fixed_length(n, alphabet):
         n = n // base
     return s
 
-
-# def add_chain_to_hash_table(table, chain_end, chain_start):
-#     existing_key = True
-#     if chain_end in table: return table, existing_key
-    
-#     table[chain_end] = chain_start #* dict searches by key -> key must be end of chain
-#     existing_key = False
-#     return table, existing_key
-
-
 def reduction(pass_hash, position, prime_mod, alphabet_set):
     #* maybe use two separate functions
     sum_ = 0
     sum_ = weighted_sum(pass_hash, position, prime_mod, len(alphabet_set))
-
-    if sum_ < 1: print("weigted sum returned 0\n")
-    sum_to_passwordSpace = int_to_string(sum_, alphabet_set, pass_length)
-    
+    # if sum_ < 1: print("weigted sum returned 0\n")
+    sum_to_passwordSpace = int_to_string(sum_, alphabet_set)
     # if len(sum_to_passwordSpace) > len(alphabet_set): print(f"weighted_sum: {sum_}\tform this hash : {pass_hash} | maps to int : {sum_to_passwordSpace}")
 
     return sum_to_passwordSpace
@@ -160,7 +149,6 @@ def password_generator(alphabet_set, pass_length):
 def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
     number_of_chains = 0
     hash_table = dict()
-    chain_length = dict()
     hash_ = ""
 
     while number_of_chains < table_size: 
@@ -174,10 +162,9 @@ def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
             int_in_password_space = reduction(hash_, position, prime_mod, alphabet_set)
 
             # if len(int_in_password_space) > len(alphabet_set): print(f"{random_password} password after chains returned number bigger \n")
-            # print(f"Reduction: {int_in_password_space}\t| hash: {hash_}")
+            # print(f"Reduction: {int_in_password_space}\t| hash: {hash_}"
 
             hash_ = sha1_encode(int_in_password_space)
-            # chain_length[int_in_password_space] = hash_
             chain_start = hash_
         
         chain_end = random_password
@@ -185,118 +172,135 @@ def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
         #: add chain if not existen
         if hash_ not in hash_table:
             print(f"addind key: {hash_} | value: {random_password}")
-            print("------------------------\n") 
             hash_table[chain_start] = chain_end #* dict searches by key -> key must be end of chain
             number_of_chains += 1 
             
     return hash_table
 
-def chain_reduce(pass_hash, position, prime, table_size, alphabet):
-    next_chain = ""
-    
-    if pass_hash in read_dict:
-        next_chain = read_dict[pass_hash] #* if match return start of chain
-        if len(next_chain) < 1 : print(f"next chain is empty")
-        print("found password beggining of func\n")
-    else: 
-        next_chain = pass_hash
-        pwd = reduction(next_chain, position, prime, alphabet)
+def traverse_chain(start_of_chain):
+    '''
+        definition: builds the length of a chain used to check values in chain
+    '''
+    lengt_of_alphaset = len(ALPHABET)
+    pass_length = LENGTH
+    table_multiplier = TABLE_MULTIPLIER
+    table_size, prime_mod = password_space_size(lengt_of_alphaset, pass_length, table_multiplier) #* not including " " as we dont generate space as password
+    chain_length = dict()
+    password = start_of_chain
+    hash_ = sha1_encode(password)
+    position = 1
+    print(f"chain start: {password}\t|hash: {hash_}\tposition: 0")
+
+    for chain_length in range(table_size - 1):
         
-        while (position != table_size-1): #the last position of the chain):
-            
-            position += 1
-            next_chain = sha1_encode(pwd)
+        int_in_password_space = reduction(hash_, position, prime_mod, ALPHABET)
 
-            if next_chain in read_dict:
-                next_chain = read_dict[next_chain] #* if match return start of chain
-                print(f"found password: {pwd}\n")
-                break
-            else:
-                pwd = reduction(next_chain, position, prime, alphabet) #* R at pos
-            
-        return pwd
+        # if len(int_in_password_space) > len(ALPHABET): print(f"{password} password after chains returned number bigger \n")
 
-def crack(chain_start, prime, table_size, alphabet):
-    # chain_start = read_dict[chain_start] #* if match return start of chain
-
-    # if len(chain_start) > 0: chain_start = sha1_encode(chain_start) 
-
-    return chain_reduce(chain_start, 1, prime, table_size, alphabet)
+        hash_ = sha1_encode(int_in_password_space)
+        print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {position}")    
+        position += 1
+        
+def chain_reduce(target, plaintext, position, prime, table_size, alphabet):
+    #: reduce chain and check against target
+    pwd = plaintext
     
+    while (position < table_size): #the last position of the chain):
+        
+        next_hash = sha1_encode(pwd)
 
-#* ------------- Code -------------
+        if next_hash == target: 
+            print(f"pwd: {pwd}\t hash: {next_hash}")
+            return pwd
+
+        position += 1
+        pwd = reduction(next_hash, position, prime, alphabet) #* R at pos
+    
+    pwd = ""    
+    return pwd    
+
+def break_password(target, read_dict, table_size, prime, alphabet):
+    goal = target
+    find_key = target
+    chain_start = ""
+    position = table_size - 1
+    position_chain_reduce = 0
+
+    if find_key in read_dict:
+        chain_start = read_dict[find_key] #* hash in look up table return start of that chain
+        
+        pwd = chain_reduce(goal, chain_start, position_chain_reduce, prime, table_size, alphabet)
+
+        if pwd != "" and position == table_size-1:    
+            print(f"found password: {pwd}") 
+            exit() 
+    else: 
+        print(":) -->")
+        # aply reduction function starting with last and check if in table
 
 
-# # : ------- building One chain of x Length for (0-4) length 3
-# # password =  "000"
-# # # password =  "1100" #: length 3
-# # # password =  "2211"
-# # # password =  "1220"
-# # # password =  "1220"
+    find_chain = goal
+    #: since initial hash is not in look up table reduce until we find a hash in look up table and then traveser chain
+    while (position > 0):
+        pwd = reduction(find_chain, position, prime, alphabet) #* R at pos
+        chain_key = sha1_encode(pwd)
 
-# lengt_of_alphaset = len(ALPHABET)
-    # pass_length = 8
-    # table_size, prime_mod = password_space_size(lengt_of_alphaset, pass_length) #* 👍 not including " " as we dont generate space as password
-    # chain_length = dict()
-    # # password = "222"
-    # # password = "020"
-    # password = "221"
-    # hash_ = sha1_encode(password)
+        print(f"reduce @ pos: {position}\tstart value: {find_chain}")
+        print(f"pwd: {pwd}\thash: {chain_key}")
 
-    # for chain_length in range(table_size - 1):
-    #     position = chain_length + 1
-    #     int_in_password_space = reduction(hash_, position, prime_mod, ALPHABET)
+        if chain_key in read_dict:
+            chain_start = read_dict[chain_key]    
+            print(f"found chain: {chain_start} : {chain_key}")
 
-    #     if len(int_in_password_space) > len(ALPHABET): print(f"{password} password after chains returned number bigger \n")
+            pwd = chain_reduce(goal, chain_start, position_chain_reduce, prime, table_size, alphabet)
 
-    #     hash_ = sha1_encode(int_in_password_space)
-    #     print(f"Reduction: {int_in_password_space}\t| hash: {hash_}")
+            if pwd != "" and position == table_size-1:             
+                print(f"found password: {pwd}") 
+                exit() 
+        
+        position -= 1
+        
+    print("Password not found!!!")
+    exit()    
 
+def build_chain_from_position(use_hash, position, chain_length):
+    for position in range(position, chain_length):
+        print(position)
+
+
+
+
+
+#* #* ------------- CODE ------------- ------------- CODE ------------- ------------- CODE -------------
+
+
+#: ------- building One chain of x Length 
+
+# traverse_chain("4241")
 
 #: ------- building table
+
 lengt_of_alphaset = len(ALPHABET)
-pass_length = 3
+pass_length = 4
 
-# create_csv_file("table") #:* 👍
-table_size, prime = password_space_size(lengt_of_alphaset, pass_length) #* 👍 not including " " as we dont generate space as password
+# create_csv_file("RainbowTable/table_length_4_adding.csv") 
+# table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
 # table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
-# write_hash_table(table)
-
+# write_hash_table(table, "RainbowTable/table_length_4_adding.csv")
 
 #: ------- cracking password
-read_dict = read_hash_table()
-# pass_ = sha1_encode("103")
-# pass_ = sha1_encode("121") #end hash value
-# pass_ = sha1_encode("01") #end hash value
-pass_ = sha1_encode("112") #end hash value
+# goal = sha1_encode("1001")
+# b = sha1_encode("0411")
+# plaintext = "0303" #: can't find this or ones above yet
+# plaintext = "0210" #: find password when the end of the chain is the password
+plaintext = "0001"
+goal = sha1_encode(plaintext)
 
-chain_start = ""
-position = 1
+read_dict = read_hash_table("RainbowTable/table_length_4_adding.csv") #* read table
+table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+print(f"goal: {plaintext}\thash: {goal}\n")
+break_password(goal, read_dict, table_size, prime, ALPHABET)
 
-if pass_ in read_dict:
-    # crack()
-    chain_start = read_dict[pass_] #* if match return start of chain
-
-    if len(chain_start) > 0: chain_start = sha1_encode(chain_start) 
-
-    pwd = chain_reduce(chain_start, 1, prime, table_size, ALPHABET)
-    print(f"found ?: {pwd}")
-    
-else:
-    next_chain = pass_
-    while (position != table_size): #the last position of the chain):
-        
-        pwd = reduction(next_chain, position, prime, ALPHABET) #* R at pos
-        next_chain = sha1_encode(pwd)
-
-        if next_chain in read_dict:
-            next_chain = read_dict[next_chain] #* if match return start of chain
-            next_chain = sha1_encode(next_chain)
-            pwd = crack(next_chain, prime, table_size, ALPHABET)
-            print(f"found password {pwd}")
-            break
-        
-        position+= 1
 
 
 
