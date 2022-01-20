@@ -33,8 +33,8 @@ def test(target, possibleSolution, start):
     encodedSolution = sha1_encode(possibleSolution)
     if target == encodedSolution:
         end = time.time()
-        print("solution found : {0}".format(possibleSolution))
-        print(f"Runtime of the program is {end - start}")
+        print("\nsolution found : {0}".format(possibleSolution))
+        print(f"Runtime of the program is {end - start}\n")
         exit()
 
 def test_bch_hash(target, possibleSolution, start):
@@ -132,21 +132,21 @@ def brute_force_BCH(target, startTime):
 
 combinationRange = range_numeric_alphabetical("a", "z", 0, 9)
 
-# pass1 = "c2543fff3bfa6f144c2f06a7de6cd10c0b650cae" #* time: 1.29463791847229 secs / solution: this
-# pass2 = "b47f363e2b430c0647f14deea3eced9b0ef300ce" #* time: 0004630088806152344 secs / solution: is
-pass3 = "e74295bfc2ed0b52d40073e8ebad555100df1380" #* time: 1.461106777191162 secs / solution: very
-# pass4 = "0f7d0d088b6ea936fb25b477722d734706fe8b40" #* time: secs / solution:
-# pass5 = "77cfc481d3e76b543daf39e7f9bf86be2e664959" #* time: secs / solution:
-# pass6 = "5cc48a1da13ad8cef1f5fad70ead8362aabc68a1" #* time: secs / solution:
-# pass7 = "4bcc3a95bdd9a11b28883290b03086e82af90212" #* time: secs / solution: 
-# pass8 = "7302ba343c5ef19004df7489794a0adaee68d285" #* time: 73.33839678764343 secs / solution: 1you1
-# pass9 = "21e7133508c40bbdf2be8a7bdc35b7de0b618ae4" #* time: secs / solution:
-# pass10 = "6ef80072f39071d4118a6e7890e209d4dd07e504" #* time: secs / solution:
-# pass11 = "02285af8f969dc5c7b12be72fbce858997afe80a" #* time: secs / solution:
-# pass12 = "57864da96344366865dd7cade69467d811a7961b" #* time: secs / solution:
+# pass_ = "c2543fff3bfa6f144c2f06a7de6cd10c0b650cae" #* time: 1.29463791847229 secs / solution: this
+# pass_ = "b47f363e2b430c0647f14deea3eced9b0ef300ce" #* time: 0004630088806152344 secs / solution: is
+# pass_ = "e74295bfc2ed0b52d40073e8ebad555100df1380" #* time: 1.461106777191162 secs / solution: very
+# pass_ = "0f7d0d088b6ea936fb25b477722d734706fe8b40" #* time: 1749.2032191753387 secs / solution: simple
+# pass_ = "77cfc481d3e76b543daf39e7f9bf86be2e664959" #* time: 15.0385000705719 secs / solution: fail7
+# pass_ = "5cc48a1da13ad8cef1f5fad70ead8362aabc68a1" #* time: 78.90713000297546 secs / solution: 5you5
+# pass_ = "4bcc3a95bdd9a11b28883290b03086e82af90212" #* time: 2810.780382156372 secs / solution: 3crack
+# pass_ = "7302ba343c5ef19004df7489794a0adaee68d285" #* time: 73.33839678764343 secs / solution: 1you1
+# pass_ = "21e7133508c40bbdf2be8a7bdc35b7de0b618ae4" #* time: 2403.248507976532 secs / solution: 00if00
+# pass_ = "6ef80072f39071d4118a6e7890e209d4dd07e504" #* time: 264.7053391933441 secs / solution: cannot
+# pass_ = "02285af8f969dc5c7b12be72fbce858997afe80a" #* time: 2748.3793671131134 secs / solution: 4this4
+# pass_ = "57864da96344366865dd7cade69467d811a7961b" #* time: 83.53042936325073 secs / solution: 6will
 
 start = time.time()
-brute_force_alpha_numeric(pass3, combinationRange, start)
+brute_force_alpha_numeric(pass_, combinationRange, start)
 
 # start = time.time()
 # brute_force_alpha_numeric(input("\nenter alpha-numeric hash: "), combinationRange ,start)
