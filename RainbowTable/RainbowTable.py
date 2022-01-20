@@ -155,7 +155,6 @@ def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
         random_password = password_generator(alphabet_set, pass_length)
         hash_ = sha1_encode(random_password)
         starting_hash = hash_
-        # chain_length[random_password] = [starting_hash]
 
         for chain_length in range(table_size - 1):
             position = chain_length + 1
