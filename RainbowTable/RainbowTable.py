@@ -9,14 +9,19 @@ import random
 
 #: ------------- GLOBAL VARIABLES -------------
 FILE_CREATED = False
+LARGEST_PWD = "99999999"
+# LARGEST_PWD = "3333"
+
+
 # ALPHABET = ['0', '1', '2', '3']
-# ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+# ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
 LENGTH = 8
 # LENGTH = 4
 # TABLE_MULTIPLIER = 1.3
 # TABLE_MULTIPLIER = 1.6
-TABLE_MULTIPLIER = 2.4
+TABLE_MULTIPLIER = 2.0
 
 #: ------------- FUNCTIONS -------------
 
@@ -73,8 +78,9 @@ def password_space_size(alphabet_size, pass_length, table_size_multiplier):
     pass_space += 1
     incremented_space = pass_space * table_size_multiplier
     table_size = int(round_half_up(math.sqrt(incremented_space)))
-    prime = sympy.nextprime(pass_space)
-
+    # prime = sympy.nextprime(pass_space)
+    prime = sympy.nextprime(LARGEST_PWD)#: force prime that will return a value <= 8 and not bigger
+    
     print(f"\nspace: {pass_space} \t table size: {table_size} \t prime: {prime}\n")
 
     return table_size, prime
@@ -271,41 +277,47 @@ def break_password(target, goal, position, read_dict, table_size, prime, alphabe
     # write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
 
 #* ------- cracking password length 4
-    # plaintext = "0303"
-    # plaintext = "0210"
-    # plaintext = "0001"
-    # plaintext = "1042"
-    # plaintext = "012"
+# plaintext = "0303"
+# plaintext = "0210"
+# plaintext = "0001"
+# plaintext = "1042"
+# plaintext = "012"
 
-    # goal = sha1_encode(plaintext)
 
-    # read_dict = read_hash_table("RainbowTable/table_length_4_adding_2.3.csv") #* read table
-    # table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
-    # starting_position = table_size -1
-    # print(f"goal: {plaintext}\thash: {goal}\n")
-    # break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
+# goal = sha1_encode(plaintext)
+
+# read_dict = read_hash_table("RainbowTable/table_length_4_adding_2.3.csv") #* read table
+# table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+# starting_position = table_size -1
+# print(f"goal: {plaintext}\thash: {goal}\n")
+# break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
 
 #: ------- building table length 8 range 0-9
 
-lengt_of_alphaset = len(ALPHABET)
-pass_length = 4
+# lengt_of_alphaset = len(ALPHABET)
 
-create_csv_file("RainbowTable/table_2.4_adding.csv") 
-table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER)
-table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
-write_hash_table(table, "RainbowTable/table_2.4_adding.csv")
+# create_csv_file("RainbowTable/table_2.4_adding.csv") 
+# table_size, prime = password_space_size(lengt_of_alphaset, LENGTH, TABLE_MULTIPLIER)
+# table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
+# write_hash_table(table, "RainbowTable/table_2.4_adding.csv")
 exit()
 
-#: ------- cracking password length 8 range 0-9
+# #: ------- cracking password length 8 range 0-9
 
 
-goal = ""
+# goal = ""
 
-read_dict = read_hash_table("RainbowTable/table_2.4_adding.csv") #* read table
-table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
-starting_position = table_size -1
-print(f"goal: {plaintext}\thash: {goal}\n")
-break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
+# read_dict = read_hash_table("RainbowTable/table_2.4_adding.csv") #* read table
+# table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+# starting_position = table_size -1
+# print(f"goal: {plaintext}\thash: {goal}\n")
+# break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
+
+
+# 100000001
+# 111111113
+
+
 
 
 
