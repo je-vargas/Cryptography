@@ -10,12 +10,16 @@ import random
 #: ------------- GLOBAL VARIABLES -------------
 FILE_CREATED = False
 MAX_TRY_COUNTER = 500
-LARGEST_PWD = "99999999"
-# LARGEST_PWD = "3333"
+# LARGEST_PWD = "99999999"
+LARGEST_PWD = "3333"
 
 
-# ALPHABET = ['0', '1', '2', '3']
-ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+
+
+
+ALPHABET = ['0', '1', '2', '3']
+# ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 # ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 LENGTH = 8
@@ -242,13 +246,13 @@ def traverse_chain(start_of_chain):
         print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {position}")    
         position += 1
 
-def chain_reduce(target, plaintext, prime, table_size, alphabet):
+def chain_reduce(target, plaintext, prime, chain_length, alphabet):
     #: reduce chain and check against target
     pwd = plaintext
     found_password = False
     position = 0
     
-    while (position < table_size): #the last position of the chain):
+    while (position < chain_length): #the last position of the chain):
         
         next_hash = sha1_encode(pwd)
 
@@ -272,10 +276,40 @@ def build_chain_from_position(use_hash, position, chain_length, prime, alphabet)
     # print(f"pwd: {pwd}\t hash: {hash_value}\n")
     return hash_value
 
-def break_password(target, goal, position, read_dict, table_size, prime, alphabet):
+# def break_password(target, goal, position, read_dict, table_size, prime, alphabet): #: CURRENTLY WORKING FROM PASSWORD_SPACE_SIZE FUNC
+    #     '''
+    #         position: 
+    #     '''
+
+    #     pass_found = False
+    #     find_key = target
+    #     new_possition = position
+
+    #     while new_possition > 0 :
+
+    #         if find_key in read_dict:
+    #             chain_start = read_dict[find_key] #* hash in look up table return start of that chain
+    #             print(f"key found: {find_key}\t init: {chain_start}\treducing from position: {new_possition}")
+                
+    #             pwd, hash_found, pass_found= chain_reduce(goal, chain_start, prime, table_size, alphabet)
+
+    #             if pass_found:    
+    #                 print(f"\n----- :) PASSWORD FOUND: {pwd}\tHash: {hash_found}\n") 
+    #                 exit() 
+            
+    #         find_key = build_chain_from_position(goal, new_possition, table_size, prime, alphabet)
+    #         new_possition -= 1
+
+    #     print("\n!! ----- PASSWORD NOT FOUND ----- !!\n")
+    #     exit()
+
+def break_password(goal, chain_length, read_dict, prime, alphabet):
+    '''
+        
+    '''
     pass_found = False
-    find_key = target
-    new_possition = position
+    find_key = goal
+    new_possition = chain_length 
 
     while new_possition > 0 :
 
@@ -283,13 +317,13 @@ def break_password(target, goal, position, read_dict, table_size, prime, alphabe
             chain_start = read_dict[find_key] #* hash in look up table return start of that chain
             print(f"key found: {find_key}\t init: {chain_start}\treducing from position: {new_possition}")
             
-            pwd, hash_found, pass_found= chain_reduce(goal, chain_start, prime, table_size, alphabet)
+            pwd, hash_found, pass_found= chain_reduce(goal, chain_start, prime, chain_length, alphabet)
 
             if pass_found:    
                 print(f"\n----- :) PASSWORD FOUND: {pwd}\tHash: {hash_found}\n") 
                 exit() 
         
-        find_key = build_chain_from_position(goal, new_possition, table_size, prime, alphabet)
+        find_key = build_chain_from_position(goal, new_possition, chain_length, prime, alphabet)
         new_possition -= 1
 
     print("\n!! ----- PASSWORD NOT FOUND ----- !!\n")
@@ -300,17 +334,17 @@ def break_password(target, goal, position, read_dict, table_size, prime, alphabe
 
 #: ------- building One chain of x Length 
 
-# traverse_chain("1033")
+traverse_chain("1033")
 
 #* ------- building table length 4
 
-lengt_of_alphaset = len(ALPHABET)
-pass_length = 4
+# lengt_of_alphaset = len(ALPHABET)
+# pass_length = 4
 
-create_csv_file("RainbowTable/table_length_4_adding_2.3.csv") 
-table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
-table = build_rainbow_table_dynamically(table_size, prime, ALPHABET, pass_length)
-write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
+# create_csv_file("RainbowTable/table_length_4_adding_2.3.csv") 
+# table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
+# table = build_rainbow_table_dynamically(table_size, prime, ALPHABET, pass_length)
+# write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
 
 #* ------- cracking password length 4
 # plaintext = "0303"
