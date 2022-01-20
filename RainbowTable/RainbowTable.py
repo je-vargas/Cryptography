@@ -9,14 +9,14 @@ import random
 
 #: ------------- GLOBAL VARIABLES -------------
 FILE_CREATED = False
-ALPHABET = ['0', '1', '2', '3']
+# ALPHABET = ['0', '1', '2', '3']
 # ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-# ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-# LENGTH = 8
-LENGTH = 4
+ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+LENGTH = 8
+# LENGTH = 4
 # TABLE_MULTIPLIER = 1.3
 # TABLE_MULTIPLIER = 1.6
-TABLE_MULTIPLIER = 2.3
+TABLE_MULTIPLIER = 2.4
 
 #: ------------- FUNCTIONS -------------
 
@@ -261,26 +261,48 @@ def break_password(target, goal, position, read_dict, table_size, prime, alphabe
 
 # traverse_chain("1033")
 
-#: ------- building table
+#* ------- building table length 4
 
-# lengt_of_alphaset = len(ALPHABET)
-# pass_length = 4
+    # lengt_of_alphaset = len(ALPHABET)
+    # pass_length = 4
 
-# create_csv_file("RainbowTable/table_length_4_adding_2.3.csv") 
-# table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
-# table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
-# write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
+    # create_csv_file("RainbowTable/table_length_4_adding_2.3.csv") 
+    # table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
+    # table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
+    # write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
 
-#: ------- cracking password
-# plaintext = "0303"
-# plaintext = "0210"
-# plaintext = "0001"
-# plaintext = "1042"
-plaintext = "012"
+#* ------- cracking password length 4
+    # plaintext = "0303"
+    # plaintext = "0210"
+    # plaintext = "0001"
+    # plaintext = "1042"
+    # plaintext = "012"
 
-goal = sha1_encode(plaintext)
+    # goal = sha1_encode(plaintext)
 
-read_dict = read_hash_table("RainbowTable/table_length_4_adding_2.3.csv") #* read table
+    # read_dict = read_hash_table("RainbowTable/table_length_4_adding_2.3.csv") #* read table
+    # table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+    # starting_position = table_size -1
+    # print(f"goal: {plaintext}\thash: {goal}\n")
+    # break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
+
+#: ------- building table length 8 range 0-9
+
+lengt_of_alphaset = len(ALPHABET)
+pass_length = 4
+
+create_csv_file("RainbowTable/table_2.4_adding.csv") 
+table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER)
+table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
+write_hash_table(table, "RainbowTable/table_2.4_adding.csv")
+exit()
+
+#: ------- cracking password length 8 range 0-9
+
+
+goal = ""
+
+read_dict = read_hash_table("RainbowTable/table_2.4_adding.csv") #* read table
 table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
 starting_position = table_size -1
 print(f"goal: {plaintext}\thash: {goal}\n")
