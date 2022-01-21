@@ -185,21 +185,18 @@ def traverse_chain(start_of_chain):
     pass_length = LENGTH
     table_multiplier = TABLE_MULTIPLIER
     table_size, prime_mod = password_space_size(lengt_of_alphaset, pass_length, table_multiplier) #* not including " " as we dont generate space as password
-    chain_length = dict()
     password = start_of_chain
     hash_ = sha1_encode(password)
-    position = 1
     print(f"chain start: {password}\t|hash: {hash_}\tposition: 0")
 
-    for chain_length in range(table_size - 1):
+    for chain_length in range(1, (table_size - 1)):
         
         int_in_password_space = reduction(hash_, position, prime_mod, ALPHABET)
 
         # if len(int_in_password_space) > len(ALPHABET): print(f"{password} password after chains returned number bigger \n")
 
         hash_ = sha1_encode(int_in_password_space)
-        print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {position}")    
-        position += 1
+        print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {chain_length}")    
 
 def chain_reduce(target, plaintext, position, prime, table_size, alphabet, tracker_position):
     #: reduce chain and check against target
