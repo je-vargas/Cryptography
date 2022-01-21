@@ -9,14 +9,14 @@ import random
 
 #: ------------- GLOBAL VARIABLES -------------
 FILE_CREATED = False
-ALPHABET = ['0', '1', '2', '3']
-# ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+# ALPHABET = ['0', '1', '2', '3']
 # ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+# ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 # LENGTH = 8
-LENGTH = 4
+# LENGTH = 4
 # TABLE_MULTIPLIER = 1.3
 # TABLE_MULTIPLIER = 1.6
-TABLE_MULTIPLIER = 2.3
+# TABLE_MULTIPLIER = 2.3
 
 #: ------------- FUNCTIONS -------------
 
@@ -150,18 +150,16 @@ def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
     number_of_chains = 0
     hash_table = dict()
     hash_ = ""
+    counter = 0
 
     while number_of_chains < table_size: 
         random_password = password_generator(alphabet_set, pass_length)
         hash_ = sha1_encode(random_password)
         starting_hash = hash_
-        # chain_length[random_password] = [starting_hash]
 
-        for chain_length in range(table_size - 1):
-            position = chain_length + 1
-            int_in_password_space = reduction(hash_, position, prime_mod, alphabet_set)
+        for chain_possision in range(1, table_size):
+            int_in_password_space = reduction(hash_, chain_possision, prime_mod, alphabet_set)
 
-            # if len(int_in_password_space) > len(alphabet_set): print(f"{random_password} password after chains returned number bigger \n")
             # print(f"Reduction: {int_in_password_space}\t| hash: {hash_}"
 
             hash_ = sha1_encode(int_in_password_space)
@@ -171,9 +169,16 @@ def build_rainbow_table(table_size, prime_mod, alphabet_set, pass_length):
         
         #: add chain if not existen
         if hash_ not in hash_table:
-            print(f"addind key: {hash_} | value: {random_password}")
+            # print(f"addind key: {hash_} | value: {random_password}")
             hash_table[chain_start] = chain_end #* dict searches by key -> key must be end of chain
             number_of_chains += 1 
+            counter = 0
+        else:
+            counter += 1
+
+        if counter > MAX_COUNTER :
+            return hash_table
+
             
     return hash_table
 
@@ -191,12 +196,13 @@ def traverse_chain(start_of_chain):
 
     for chain_length in range(1, (table_size - 1)):
         
-        int_in_password_space = reduction(hash_, position, prime_mod, ALPHABET)
+        int_in_password_space = reduction(hash_, chain_length, prime_mod, ALPHABET)
 
         # if len(int_in_password_space) > len(ALPHABET): print(f"{password} password after chains returned number bigger \n")
 
         hash_ = sha1_encode(int_in_password_space)
-        print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {chain_length}")    
+        print(f"Reduction: {int_in_password_space}\t|hash: {hash_}\tposition: {chain_length}")  
+    print("\n")  
 
 def chain_reduce(target, plaintext, position, prime, table_size, alphabet, tracker_position):
     #: reduce chain and check against target
@@ -258,17 +264,30 @@ def break_password(target, goal, position, read_dict, table_size, prime, alphabe
 
 #: ------- building One chain of x Length 
 
-traverse_chain("1033")
+# traverse_chain("3222")
+# traverse_chain("2121")
+# traverse_chain("0203")
+# traverse_chain("2321")
+# traverse_chain("3121")
+# traverse_chain("0110")
+# traverse_chain("1011")
+# traverse_chain("3102")
+# traverse_chain("3313")
+# traverse_chain("1122")
+# traverse_chain("2031")
 
 #: ------- building table
+MAX_COUNTER = 30000
+# ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+# LENGTH = 8
+ALPHABET = ['0', '1', '2', '3']
+LENGTH = 4
+TABLE_MULTIPLIER = 1.2
 
-# lengt_of_alphaset = len(ALPHABET)
-# pass_length = 4
-
-# create_csv_file("RainbowTable/table_length_4_adding_2.3.csv") 
-# table_size, prime = password_space_size(lengt_of_alphaset, pass_length, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
-# table = build_rainbow_table(table_size, prime, ALPHABET, pass_length)
-# write_hash_table(table, "RainbowTable/table_length_4_adding_2.3.csv")
+# create_csv_file("RainbowTable/table_2.3.csv") 
+table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER) #* not including " " as we dont generate space as password
+table = build_rainbow_table(table_size, prime, ALPHABET, LENGTH)
+write_hash_table(table, "RainbowTable/table_2.3.csv")
 
 #: ------- cracking password
 # goal = sha1_encode("1001")
@@ -278,13 +297,13 @@ traverse_chain("1033")
 # plaintext = "0001"
 # plaintext = "1042"
 # plaintext = "1131"
-goal = sha1_encode(plaintext)
+# goal = sha1_encode(plaintext)
 
-read_dict = read_hash_table("RainbowTable/table_length_4_adding_2.3.csv") #* read table
-table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
-starting_position = table_size -1
-print(f"goal: {plaintext}\thash: {goal}\n")
-break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
+# read_dict = read_hash_table("RainbowTable/test1.csv") #* read table
+# table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
+# starting_position = table_size -1
+# print(f"goal: {plaintext}\thash: {goal}\n")
+# break_password(goal, goal, starting_position, read_dict, table_size, prime, ALPHABET)
 
 
 
