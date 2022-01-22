@@ -1,10 +1,10 @@
 
-#: ------- TASK 1 - CREDIT CARD CHECKER ------- ------- TASK 1 - CREDIT CARD CHECKER ------- ------- TASK 1 - CREDIT CARD CHECKER -------
+#: ----------- TASK 1 - CREDIT CARD CHECKER ----------- TASK 1 - CREDIT CARD CHECKER ----------- TASK 1 - CREDIT CARD CHECKER -----------
 def read_number(readNumber):
     '''
         FUNCTION: read_number
         DEFINITION: Read's number from keyboard input and returns it into a list
-        PARAMETERS: String read from input()
+        PARAMETERS: readNumber: String
         RETURNS: list of string passed in
     '''
     numberList = list()
@@ -20,7 +20,7 @@ def doubled_digit(digit):
         FUNCTION: doubled_digit
         DEFINITION: Doubles value passed in and checks if number passed in is bigger or equal to 10
                     if it subtract 9 to make it single digit and returns digit
-        PARAMETERS: Int
+        PARAMETERS: digit: Int
         RETURNS: Int
     '''
     doubleDigit = digit * 2 
@@ -34,7 +34,7 @@ def credit_card_checker(cardNumber):
         DEFINITION: loops through list of numbers passed, jumping by 2.
                     then adds all numbers in the list and mods by 10. 
                     if value is 0 is valid else invalid
-        PARAMETERS: list of integers
+        PARAMETERS: carNumbers: list(int)
         RETURNS: void
     '''
     cardNumbersSplit = cardNumber.copy()
