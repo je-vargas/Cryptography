@@ -1,9 +1,11 @@
 
-#: --------------- Task 3 credit card checker
-#* 15 digits of credit card are random generated
+#: ------- TASK 1 - CREDIT CARD CHECKER ------- ------- TASK 1 - CREDIT CARD CHECKER ------- ------- TASK 1 - CREDIT CARD CHECKER -------
 def read_number(readNumber):
     '''
+        FUNCTION: read_number
         DEFINITION: Read's number from keyboard input and returns it into a list
+        PARAMETERS: String read from input()
+        RETURNS: list of string passed in
     '''
     numberList = list()
     sliceUpto = 1
@@ -15,8 +17,11 @@ def read_number(readNumber):
 
 def doubled_digit(digit):
     '''
-        DEFINITION: "Doubles integer passed in and checks if its bigger than 10
-                    subtracts 9 if it is. Value is returned" 
+        FUNCTION: doubled_digit
+        DEFINITION: Doubles value passed in and checks if number passed in is bigger or equal to 10
+                    if it subtract 9 to make it single digit and returns digit
+        PARAMETERS: Int
+        RETURNS: Int
     '''
     doubleDigit = digit * 2 
     if ( doubleDigit >= 10):
@@ -25,14 +30,23 @@ def doubled_digit(digit):
 
 def credit_card_checker(cardNumber):
     '''
-    Definition: loops through list of numbers passed, jumping by 2.
-                then adds all numbers in the list and mods by 10. 
-                if value is 0 is valid else invalid
+        FUNCTION: doubled_digit
+        DEFINITION: loops through list of numbers passed, jumping by 2.
+                    then adds all numbers in the list and mods by 10. 
+                    if value is 0 is valid else invalid
+        PARAMETERS: list of integers
+        RETURNS: void
     '''
     cardNumbersSplit = cardNumber.copy()
+
+    #* loops through list of integers, starting from index 0. 
+    #* with step index of 2 so only second index from starting position/ previious position is used
     for digit in range(0, len(cardNumbersSplit) , 2):
         cardNumbersSplit[digit] = doubled_digit(cardNumbersSplit[digit])
     cardNumbersSum = sum(cardNumbersSplit)
+
+    #* mod carNumbersum by 10 and check if its 0 it's valid
+    #* otherwise print mod value
     validCardNumber = cardNumbersSum % 10
     if validCardNumber == 0: print("valid: {0}".format(validCardNumber))
     else: print("invalid: {0}".format(validCardNumber))
