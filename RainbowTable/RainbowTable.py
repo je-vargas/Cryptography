@@ -127,20 +127,15 @@ def weighted_sum(hash_value, position, prime_mod, alphabet_set_len):
     total = 0
     ascii_list = []
 
-    # if position % 2 == 0:
-    #     for i in range(hash_value_length):
-    #         #* add ascii value for string hash_value[i] to ascii_list
-    #         ascii_list.append(ord(hash_value[i]))
-    #         total += (ascii_list[i] * (alphabet_set_len ** (hash_value_length - i))) % prime_mod
-    #     total = (total + position) % prime_mod
-    # else:
-    #     total = int(hash_value, 16)
-    #     total = (total - position) % prime_mod
-    for i in range(hash_value_length):
-#         #* add ascii value for string hash_value[i] to ascii_list
-        ascii_list.append(ord(hash_value[i]))
-        total += (ascii_list[i] * (alphabet_set_len ** (hash_value_length - i))) % prime_mod
-    total = (total + position) % prime_mod
+    if position % 2 == 0:
+        for i in range(hash_value_length):
+            #* add ascii value for string hash_value[i] to ascii_list
+            ascii_list.append(ord(hash_value[i]))
+            total += (ascii_list[i] * (alphabet_set_len ** (hash_value_length - i))) % prime_mod
+        total = (total - position) % prime_mod
+    else:
+        total = int(hash_value, 16)
+        total = (total + position) % prime_mod
 
     return total
 
@@ -171,9 +166,7 @@ def reduction(pass_hash, position, prime_mod, alphabet_set):
     #* maybe use two separate functions
     sum_ = 0
     sum_ = weighted_sum(pass_hash, position, prime_mod, len(alphabet_set))
-    # if sum_ < 1: print("weigted sum returned 0\n")
     sum_to_passwordSpace = int_to_string(sum_, alphabet_set)
-    # if len(sum_to_passwordSpace) > len(alphabet_set): print(f"weighted_sum: {sum_}\tform this hash : {pass_hash} | maps to int : {sum_to_passwordSpace}")
 
     return sum_to_passwordSpace
 
@@ -299,7 +292,7 @@ def break_password(target, goal, length_of_chain, read_dict, prime, alphabet):
     find_key = target
     end_position_of_chain = length_of_chain - 1
 
-    while end_position_of_chain > 0:
+    while end_position_of_chain >= 0:
         
         #* checks if hash is one of the keys in the dictionary
         if find_key in read_dict:
@@ -326,36 +319,37 @@ def break_password(target, goal, length_of_chain, read_dict, prime, alphabet):
 # ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 # ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-FILE_NAME = "RainbowTable/4_add_1.3.csv"
+FILE_NAME = "RainbowTable/8_add_subtract_1.8.csv"
 
-# MAX_COUNTER = 600000
-MAX_COUNTER = 500
+MAX_COUNTER = 500000
+# MAX_COUNTER = 500
 
-# TABLE_MULTIPLIER = 1.8
-TABLE_MULTIPLIER = 1.3
+TABLE_MULTIPLIER = 1.8
+# TABLE_MULTIPLIER = 1.3
 
 # CHAINS = 25000 #*8
 # C_LENGTH = 8000
+CHAINS = 30800 #*8
+C_LENGTH = 6500
 # CHAINS = 41 #*4
 # C_LENGTH = 15 
-# CHAINS = 12 #*3
-# C_LENGTH = 4 #*3
 
-# ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-# LENGTH = 8
-ALPHABET = ['0', '1', '2', '3']
-LENGTH = 4
+
+ALPHABET = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+LENGTH = 8
+# ALPHABET = ['0', '1', '2', '3']
+# LENGTH = 4
 
 
 table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
 
 #: ------- building table
 
-# chain = table_size
-# c_length = table_size
+chain = table_size
+c_length = table_size
 
-# table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
-# write_hash_table(table, FILE_NAME)
+table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
+write_hash_table(table, FILE_NAME)
 
 #: ------- building One chain of x Length 
 # traverse_chain("0011", table_size, prime, ALPHABET)
@@ -364,12 +358,12 @@ table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
 # plaintext = "0011"
 # plaintext = "2110" 
 # plaintext = "210"
-plaintext = "002"
-goal = sha1_encode(plaintext)
+# plaintext = "002"
+# goal = sha1_encode(plaintext)
 
-read_dict = read_hash_table(FILE_NAME)
-print(f"goal: {plaintext}\thash: {goal}\n")
-break_password(goal, goal, table_size, read_dict, prime, ALPHABET)
+# read_dict = read_hash_table(FILE_NAME)
+# print(f"goal: {plaintext}\thash: {goal}\n")
+# break_password(goal, goal, C_LENGTH, read_dict, prime, ALPHABET)
 
 
 
