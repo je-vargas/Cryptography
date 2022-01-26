@@ -297,12 +297,12 @@ def break_password(target, goal, length_of_chain, read_dict, prime, alphabet):
         #* checks if hash is one of the keys in the dictionary
         if find_key in read_dict:
             chain_start = read_dict[find_key] 
-            print(f"key found: {find_key}\t chain start: {chain_start}\treduced poss: {end_position_of_chain}")
             
             #* check if for the key found any of the chains are equal to goal
-            pwd, hash_found, pass_found= check_password_exists_in_chain(goal, chain_start, length_of_chain, prime, alphabet)
+            pwd, hash_found, pass_found = check_password_exists_in_chain(goal, chain_start, length_of_chain, prime, alphabet)
 
-            if pass_found:    
+            if pass_found:
+                print(f"key found: {find_key}\t chain start: {chain_start}\treduced poss: {end_position_of_chain}")
                 print(f"\nPASSWORD FOUND: {pwd}\thash: {hash_found}\n") 
                 exit() 
         
@@ -345,25 +345,43 @@ table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
 
 #: ------- building table
 
-chain = table_size
-c_length = table_size
+# chain = table_size
+# c_length = table_size
 
-table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
-write_hash_table(table, FILE_NAME)
+# table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
+# write_hash_table(table, FILE_NAME)
 
 #: ------- building One chain of x Length 
 # traverse_chain("0011", table_size, prime, ALPHABET)
 
-#: ------- cracking password
-# plaintext = "0011"
-# plaintext = "2110" 
-# plaintext = "210"
-# plaintext = "002"
+# #: ------- cracking password
+
+# goal = "fe635ae88967693bc7e7eead87906e62e472c52f" #* solution: 187494 -> demo 1
+# goal = "3ac2d907663deccd843f9bbcf0c63bd3ad885a0e" #* solution: 940376 -> -> demo 1
+# goal = "3557c095ed6c16a90febda48d6b3a4490107b0d9" #* solution: 1098368 -> -> demo 1
+# goal = "85e04129ed328d4a2b3eedabca74d08b3e6badc1" #* solution: NOT FOUND -> -> demo 1
+# goal = "70352f41061eda4ff3c322094af068ba70c3b38b" #* solution: 00000000 -> -> demo 1
+# goal = "052bd5b02559d1270866c5626538e720cec0c135" #* solution: 93020840 -> -> demo 1
+# goal = "3e71f65d56cb29521ac16ff1f92ecace156b1db5" #* solution: 87657890 -> -> demo 1
+# goal = "bfc52d4e36cb45cb667749982755e63630f3bc93" #* solution: 09680243 -> -> demo 1
+# goal = "8cb2237d0679ca88db6464eac60da96345513964" #* solution: 12345 -> -> demo 1
+# goal = "38bbc0a1ca7e9b3e9f6ab33782e0f780f009db1f" #* solution: 99887766 -> -> demo 1
+
+# goal = "21e4b025b7b858928ec3ce22e373ff5b28df87ad" #* solution: 58493072 -> demo 3
+# goal = "d7d5d8b3838452a833f4c6a30a3b9a78cb88e530" #* solution: 0139826 -> demo 3
+# goal = "7236da7fee4ddcb8c389b9732e78c7c4e1fcc1e4" #* solution: 60248677 -> demo 3
+# goal = "564831f5a86d1d0b8f465042c6e17c4e7d1a1e7d" #* solution: NOT FOUND -> demo 3
+# goal = "7f06bee6c1214d732a9e40765bfae0aa3e547c09" #* solution: 34284930 -> demo 3
+# goal = "6ec7be98bca5d1812fa41dbb719b552d01c253f7" #* solution: 76422585 -> demo 3
+# goal = "cedd8db553409b282deb6ca276203c5edd6f0971" #* solution: 36432700 -> demo 3
+# goal = "8bc2059150084f16ad065924444d552ce521c090" #* solution: 09385847 -> demo 3
+# goal = "886e177c49dc6dd72176e1be8ba5f4f907f54883" #* solution: 23216780 -> demo 3
+# goal = "911a45dec90e5ee1d4f5acc8ce17c8068c9512b0" #* solution: 5927477 -> demo 3
 # goal = sha1_encode(plaintext)
 
-# read_dict = read_hash_table(FILE_NAME)
-# print(f"goal: {plaintext}\thash: {goal}\n")
-# break_password(goal, goal, C_LENGTH, read_dict, prime, ALPHABET)
+read_dict = read_hash_table(FILE_NAME)
+print(f"goal: {goal}\thash: {goal}\n")
+break_password(goal, goal, C_LENGTH, read_dict, prime, ALPHABET)
 
 
 
