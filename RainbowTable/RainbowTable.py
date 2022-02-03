@@ -348,7 +348,7 @@ table_size, prime = password_space_size(len(ALPHABET), LENGTH, TABLE_MULTIPLIER)
 # chain = table_size
 # c_length = table_size
 
-# table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
+table = build_rainbow_table(CHAINS, C_LENGTH, prime, ALPHABET, LENGTH)
 # write_hash_table(table, FILE_NAME)
 
 #: ------- building One chain of x Length 

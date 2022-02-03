@@ -10,8 +10,9 @@ def mod_multiplication(x, y, mod):
 
 def mod_inverse(x, mod):
     for a in range(1, mod):
-        print(a)
         if (mod_multiplication(a, x, mod) == 1):
+            # print(f"inverse: {a} for prime: {x}")
+            print(f"d={x}, e={a}")
             return a
     return -1
 
@@ -32,10 +33,43 @@ def mod_power_to(x, power, mod):
     xToPower = pow(x, power)
     return (xToPower % mod)
 
-# a = mod_addition(-2,-7,5)
-# b = mod_multiplication(-3,8,11)
-# c = mod_inverse(13, 11)
-# # print(a)
-# print(b)
-# print(c)
-print(mod_square_root(11, 11))
+def int_to_string(n, alphabet_set):
+    '''
+        FUNCTION: int_to_string
+        DEFINITION: Maps a big integer into a possible solution for the set password length
+        PARAMETERS: n: int, alphabet_set: list(string)
+        RETURNS: s: int
+    '''
+    s = ""
+    base = alphabet_set
+    # base = len(alphabet_set)
+
+    while n >= 0:
+        remainder = n % base
+        n = n // base #* int division
+        # s = s + str(alphabet_set[remainder]) 
+        n = n - 1
+    return s
+
+import sympy
+
+# a = sympy.primerange(108)
+# for i in a: 
+#     print(i)
+
+
+a = [5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107]
+ch = list()
+
+for i in a: 
+
+    d = mod_inverse(i, 108)
+    # print(d)
+    ch.append(d)
+
+
+# a = 7*31
+# # print(a % 108)
+# print(pow(8, 43))
+
+
